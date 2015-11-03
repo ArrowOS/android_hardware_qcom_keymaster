@@ -15,8 +15,8 @@ ifeq ($(TARGET_BOARD_PLATFORM),msm8084)
 keymaster-def += -D_ION_HEAP_MASK_COMPATIBILITY_WA
 endif
 endif
-ifeq ($(TARGET_KEYMASTER_WAIT_FOR_QSEE),true)
-keymaster-def += -DWAIT_FOR_QSEE
+ifeq ($(TARGET_KEYMASTER_SKIP_WAITING_FOR_QSEE),true)
+keymaster-def += -DSKIP_WAITING_FOR_QSEE
 endif
 
 include $(CLEAR_VARS)
@@ -37,7 +37,6 @@ LOCAL_SHARED_LIBRARIES := \
         liblog \
         libc \
         libdl \
-        libhardware \
         libcutils
 
 LOCAL_HEADER_LIBRARIES := generated_kernel_headers
