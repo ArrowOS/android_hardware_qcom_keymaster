@@ -53,7 +53,6 @@
 //#define LOG_NDEBUG 0
 
 #define LOG_TAG "QCOMKeyMaster"
-
 #define MAX_PROPERTY_GET_ATTEMPTS 60
 #define PROPERTY_GET_SLEEP_INTERVAL 1
 
@@ -112,6 +111,7 @@ static int qcom_km_get_keypair_public(const keymaster0_device_t* dev,
 
     struct qcom_km_key_blob * keyblob_ptr = (struct qcom_km_key_blob *)keyBlob;
 
+    UNUSED(dev);
     if (x509_data == NULL || x509_data_length == NULL) {
         ALOGE("Output public key buffer == NULL");
         return -1;
@@ -742,7 +742,9 @@ static int qcom_km_open(const hw_module_t* module, const char* name,
 {
     int ret = 0;
     unsigned int attempt_num = 0;
+#ifndef WAIT_FOR_QSEE
     char property_val[PROPERTY_VALUE_MAX] = {0};
+#endif
     qcom_keymaster_handle_t* km_handle;
     if (strcmp(name, KEYSTORE_KEYMASTER) != 0)
         return -EINVAL;
@@ -767,12 +769,16 @@ static int qcom_km_open(const hw_module_t* module, const char* name,
     dev->context = (void *)km_handle;
     while (attempt_num < MAX_PROPERTY_GET_ATTEMPTS)
     {
+#ifndef WAIT_FOR_QSEE
         property_get("sys.keymaster.loaded", property_val, "");
         if (strncmp(property_val, "true", sizeof(property_val)) == 0)
         {
+#endif
             ALOGD("keymaster app is loaded");
             break;
+#ifndef WAIT_FOR_QSEE
         }
+#endif
         if (attempt_num == 0)
             ALOGE("keymaster app is not loaded, attempt number %d", attempt_num);
         attempt_num++;
