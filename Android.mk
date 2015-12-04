@@ -2,6 +2,7 @@
 ifneq ($(BOARD_IS_AUTOMOTIVE),true)
 LOCAL_PATH := $(call my-dir)
 
+ifneq ($(TARGET_PROVIDES_KEYMASTER),true)
 ifneq ($(filter msm8960 msm8084,$(TARGET_BOARD_PLATFORM)),)
 
 keymaster-def := -fvisibility=hidden -Wall
@@ -47,4 +48,5 @@ LOCAL_MODULE_OWNER := qcom
 include $(BUILD_SHARED_LIBRARY)
 
 endif # TARGET_BOARD_PLATFORM
+endif # TARGET_PROVIDES_KEYMASTER
 endif
