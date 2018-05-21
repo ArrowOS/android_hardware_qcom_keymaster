@@ -37,6 +37,7 @@ LOCAL_SHARED_LIBRARIES := \
         liblog \
         libc \
         libdl \
+        libhardware \
         libcutils
 
 LOCAL_HEADER_LIBRARIES := generated_kernel_headers
